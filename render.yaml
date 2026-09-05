@@ -1,0 +1,46 @@
+# Render blueprint for the Forge control plane.
+#
+# A Docker web service rather than a serverless function: the MCP
+# streamable-HTTP transport keeps its session manager in the app's lifespan, so
+# the process has to stay alive between requests.
+#
+# The free plan spins down after idle, so the first request after a pause pays
+# a cold start. An agent's first MCP call may need a retry.
+
+services:
+  - type: web
+    name: forge-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: ./api
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+
+    envVars:
+      # Render injects PORT and expects the container to bind it; the Dockerfile
+      # already does. Everything below is set in the dashboard, not committed.
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+      # The OAuth issuer and the base of the MCP resource URL advertised in the
+      # RFC 8414 and RFC 9728 discovery documents. It must be the exact public
+      # HTTPS origin of this service, or every agent login fails at discovery.
+      - key: FORGE_PUBLIC_URL
+        fromService:
+          type: web
+          name: forge-api
+          envVarKey: RENDER_EXTERNAL_URL
+
+      # Comma-separated. The first is canonical — it is where the OAuth consent
+      # page lives. Add Vercel preview URLs after it.
+      - key: WEB_ORIGIN
+        sync: false
+      # Origins allowed as the `azp` claim of a Clerk session token.
+      - key: CLERK_AUTHORIZED_PARTIES
+        sync: false
