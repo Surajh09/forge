@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _API_DIR = Path(__file__).resolve().parents[1]  # api/
@@ -44,6 +45,15 @@ class Settings(BaseSettings):
     # Public base URL of this API. It is the OAuth issuer and the base of the
     # MCP resource URL (`<forge_public_url>/mcp`) that agents connect to.
     forge_public_url: str = "http://localhost:8000"
+
+    @field_validator("forge_public_url")
+    @classmethod
+    def _no_trailing_slash(cls, v: str) -> str:
+        # RFC 8414 §3.3: the `issuer` a client reads back must be byte-identical to the
+        # URL it inserted the well-known path into. A deployment platform hands out
+        # origins with a trailing slash, so normalize here rather than trusting whoever
+        # pastes the value; otherwise discovery advertises an issuer strict clients reject.
+        return v.rstrip("/")
 
     @property
     def mcp_resource_url(self) -> str:
