@@ -23,3 +23,7 @@ web/next-env.d.ts
 # Local Context Store (disposable replica; cloud is authoritative)
 .forge/
 cli/dist/
+
+# Local Vercel API token (never commit)
+.vercel-token
+.vercel/

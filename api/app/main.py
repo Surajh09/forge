@@ -15,6 +15,7 @@ Boxes from system-design.png → modules:
   Orchestration Server   → routers/stubs/* (501, contracts only)
 """
 
+import logging
 from contextlib import asynccontextmanager
 from urllib.parse import urlparse
 
@@ -27,6 +28,8 @@ from app.config import get_settings
 from app.routers import admin, agent, context, features, me, oauth, sessions, sync, teams, users
 from app.routers.stubs import ingestion, orchestration, webhooks
 from app.toon_codec import ToonError
+
+logger = logging.getLogger("forge.api")
 
 settings = get_settings()
 
@@ -49,8 +52,23 @@ app.add_middleware(
 
 
 @app.exception_handler(APIError)
-def _db_error(_: Request, exc: APIError) -> JSONResponse:
+def _db_error(request: Request, exc: APIError) -> JSONResponse:
     # Surface Postgres/PostgREST errors in the same {code, message} envelope as our own.
+    #
+    # postgrest-py falls back to the message "JSON could not be generated" whenever the
+    # response body is not JSON at all -- a misconfigured SUPABASE_URL reaching the gateway
+    # instead of PostgREST, for instance. In that case the status and raw body are the only
+    # useful diagnostic, and they are dropped by the envelope, so log them here. They stay
+    # server-side: the body can carry schema detail we do not want to hand to a caller.
+    logger.error(
+        "supabase error on %s %s: code=%s message=%s hint=%s details=%s",
+        request.method,
+        request.url.path,
+        exc.code,
+        exc.message,
+        exc.hint,
+        exc.details,
+    )
     return JSONResponse(status_code=500, content={"detail": {"code": "DB_ERROR", "message": exc.message}})
 
 
