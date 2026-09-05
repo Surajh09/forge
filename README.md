@@ -150,7 +150,8 @@ authorization server, so any MCP-capable agent connects without an API key and w
 Supabase secret.
 
 ```bash
-claude mcp add --transport http forge http://localhost:8000/mcp
+claude mcp add --transport http forge https://api-zeta-six-25.vercel.app/mcp
+# against a local API instead: http://localhost:8000/mcp
 # then, inside Claude Code:
 /mcp     # choose "forge", sign in, approve the consent screen
 ```
