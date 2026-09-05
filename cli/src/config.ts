@@ -17,8 +17,13 @@ import { dirname, join, resolve } from "node:path";
 export const FORGE_HOME = join(homedir(), ".forge");
 export const STORE_DIRNAME = ".forge";
 
+// The published package is installed on machines that have no Forge running, so the
+// default has to be the deployment, not a local dev server. FORGE_API_URL overrides it
+// for work against a local API or another instance.
+export const DEFAULT_API_URL = "https://api-zeta-six-25.vercel.app";
+
 export function defaultApiUrl(): string {
-  return process.env.FORGE_API_URL ?? "http://localhost:8000";
+  return process.env.FORGE_API_URL ?? DEFAULT_API_URL;
 }
 
 /** Walk up from cwd looking for a project marker; fall back to cwd. */
