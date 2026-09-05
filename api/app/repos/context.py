@@ -162,7 +162,15 @@ def create_entry(org_id: str, data: Mapping[str, Any]) -> dict:
 def create_entries(org_id: str, rows: list[Mapping[str, Any]]) -> list[dict]:
     if not rows:
         return []
-    payload = [{**_to_row(r), "clerk_org_id": org_id} for r in rows]
+    # A PostgREST bulk insert sends one column list for the whole batch, so a key
+    # present on some rows and absent from others is written as NULL for the rest
+    # rather than falling back to the column default. created_at/updated_at are
+    # `not null default now()`, so a batch that mixes rows carrying timestamps with
+    # rows relying on the default fails the not-null constraint -- which only ever
+    # happens on a database fresh enough for both kinds to be inserted at once.
+    # Give every row the same keys; explicit values still win.
+    stamp = _now()
+    payload = [{"created_at": stamp, "updated_at": stamp, **_to_row(r), "clerk_org_id": org_id} for r in rows]
     created = get_db().table("context_entries").insert(payload).execute().data
     return [_hydrate(r) for r in created]
 
