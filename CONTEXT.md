@@ -94,7 +94,7 @@ Steps 7–11 of §25, completing Phase 2. Decisions: a **local stdio MCP that pr
 actually serves agents, per the §2 diagram), the store as **JSON under `.forge/`** (no native deps, genuinely
 disposable), and conflicts **flagged on write with the newcomer quarantined**.
 
-`cli/` is `@forge/cli`, TypeScript, dependency-light on purpose: it handles the user's credential, so every
+`cli/` is `@suhe09/forge-cli`, TypeScript, dependency-light on purpose: it handles the user's credential, so every
 dependency is supply-chain surface. Argument parsing is hand-rolled for that reason.
 
 **Four bugs that only running it could find**, all worth remembering:

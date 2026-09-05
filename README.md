@@ -196,7 +196,7 @@ The CLI gives a developer machine a Local Context Store, evidence collection, an
 serves agents from the replica instead of the network.
 
 ```bash
-pnpm --filter @forge/cli build
+pnpm --filter @suhe09/forge-cli build
 node cli/dist/index.js login      # OAuth in your browser, same flow an agent uses
 node cli/dist/index.js init       # point .mcp.json at the local server
 node cli/dist/index.js doctor     # credential, server and store health

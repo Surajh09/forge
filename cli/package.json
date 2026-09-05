@@ -1,13 +1,32 @@
 {
-  "name": "@forge/cli",
+  "name": "@suhe09/forge-cli",
   "version": "0.1.0",
-  "private": true,
   "description": "Forge local package: CLI, Local Context Store, evidence collection, and a local MCP server that proxies the Forge Context Bank.",
+  "license": "MIT",
   "type": "module",
   "bin": {
     "forge": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "forge",
+    "context",
+    "ai-agents",
+    "cli"
+  ],
+  "homepage": "https://github.com/Surajh09/forge#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Surajh09/forge.git",
+    "directory": "cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",

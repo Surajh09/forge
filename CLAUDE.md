@@ -91,7 +91,7 @@ security boundary).
 set, so it lands in the review queue instead of silently duplicating. Nothing is auto-merged or overwritten.
 Tune the rule in that one file; it is pure and unit-tested.
 
-**Local package — `cli/` (`@forge/cli`, TypeScript):** the developer-machine half. `forge login` runs the same
+**Local package — `cli/` (`@suhe09/forge-cli`, TypeScript):** the developer-machine half. `forge login` runs the same
 OAuth flow an agent does; `forge init` points `.mcp.json` at the local stdio server; `forge context
 pull/sync/show/status/purge` drive the Local Context Store; `forge doctor` diagnoses. The store is plain JSON
 under `.forge/` (gitignored, disposable — the cloud is authoritative): `features/<KEY>.json` is the replica,

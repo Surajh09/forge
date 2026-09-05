@@ -90,7 +90,7 @@ function cmdInit(args: Args): void {
   servers.forge = {
     type: "stdio",
     command: "npx",
-    args: ["-y", "@forge/cli", "mcp"],
+    args: ["-y", "@suhe09/forge-cli", "mcp"],
     env: { FORGE_API_URL: args.api },
   };
   writeFileSync(path, `${JSON.stringify(existing, null, 2)}\n`);
@@ -103,7 +103,7 @@ function cmdConnect(args: Args): void {
   const target = args._[1];
   if (target !== "claude") throw new Error("Only 'forge connect claude' is supported today.");
   out("Run this once, from the project root:\n");
-  out(`  claude mcp add --scope project --transport stdio forge -- npx -y @forge/cli mcp`);
+  out(`  claude mcp add --scope project --transport stdio forge -- npx -y @suhe09/forge-cli mcp`);
   out(`\nOr simply: forge init   (writes the same thing into .mcp.json)`);
 }
 
