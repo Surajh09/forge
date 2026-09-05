@@ -1,0 +1,18 @@
+packages:
+  - web
+  - cli
+
+# pnpm blocks dependency build scripts by default. These are the ones Forge needs:
+#   supabase       — postinstall downloads the Supabase CLI binary (used by `pnpm db:start`)
+#   unrs-resolver  — native resolver used by eslint-config-next
+allowBuilds:
+  supabase: true
+  unrs-resolver: true
+
+# Versions already in use when the repo moved to pnpm, exempted from the
+# minimum-release-age gate so installs stay reproducible.
+minimumReleaseAgeExclude:
+  - '@base-ui/react@1.8.0'
+  - '@base-ui/utils@0.4.0'
+  - lucide-react@1.41.0
+  - shadcn@4.21.0

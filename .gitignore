@@ -1,0 +1,25 @@
+# deps
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# env
+.env
+.env.local
+.env*.local
+
+# build
+web/.next/
+web/out/
+web/next-env.d.ts
+*.tsbuildinfo
+
+# misc
+.DS_Store
+*.log
+
+# Local Context Store (disposable replica; cloud is authoritative)
+.forge/
+cli/dist/
