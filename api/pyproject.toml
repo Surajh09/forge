@@ -1,0 +1,26 @@
+[project]
+name = "forge-api"
+version = "0.1.0"
+description = "Forge control plane API (FastAPI) — identity, features, sessions, Context Bank"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141,<1",
+    "uvicorn[standard]>=0.52",
+    "clerk-backend-api>=7.0,<8",
+    "supabase>=2.31,<3",
+    "httpx>=0.27",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    # Official Python port of TOON (Token-Oriented Object Notation), by TOON's author.
+    # Pinned to the beta: 0.1.0 on PyPI is only a namespace reservation, so this is
+    # the sole released implementation. Revisit when a stable 0.9/1.0 ships.
+    "toon-format==0.9.0b1",
+    "mcp==2.1.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
