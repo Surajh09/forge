@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "forge": {
+      "type": "http",
+      "url": "${FORGE_MCP_URL:-http://localhost:8000/mcp}"
+    }
+  }
+}
