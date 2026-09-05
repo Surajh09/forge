@@ -1,0 +1,275 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* System preference drives the theme. No toggle, no .dark class — which is why
+   the previous `&:is(.dark *)` variant never fired and left the dark palette
+   and every `dark:` utility dead. */
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme inline {
+  /* Geist is loaded by next/font in app/layout.tsx as --font-geist-sans.
+     This mapping is what actually applies it; it used to reference itself. */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Surfaces */
+  --color-glass: var(--glass-bg);
+  --color-glass-border: var(--glass-border);
+  --color-elevated: var(--elevated);
+
+  /* Context Bank taxonomy — each meaning owns one hue, defined once.
+     Components derive fill/border/text from these instead of hardcoding
+     `bg-emerald-500/15 text-emerald-700 …` per badge. */
+  --color-kind-decision: var(--kind-decision);
+  --color-kind-constraint: var(--kind-constraint);
+  --color-kind-architecture: var(--kind-architecture);
+  --color-kind-change: var(--kind-change);
+  --color-kind-known-issue: var(--kind-known-issue);
+  --color-kind-open-question: var(--kind-open-question);
+
+  --color-state-active: var(--state-active);
+  --color-state-pending: var(--state-pending);
+  --color-state-rejected: var(--state-rejected);
+  --color-state-neutral: var(--state-neutral);
+
+  /* Type scale */
+  --text-display: 3.25rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-title: 1.75rem;
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.02em;
+  --text-section: 1.125rem;
+  --text-section--line-height: 1.4;
+  --text-section--letter-spacing: -0.01em;
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 1.45;
+  --text-caption--letter-spacing: 0.08em;
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-shimmer-sweep: shimmer-sweep 1.6s var(--ease-out-soft) infinite;
+  --animate-rise: rise 0.5s var(--ease-out-soft) both;
+}
+
+:root {
+  /* Brand hue is the violet-indigo already present in the landing beams, so the
+     marketing surface and the product agree instead of using unrelated colours. */
+  --brand-h: 285;
+
+  --background: oklch(0.985 0.004 var(--brand-h));
+  --foreground: oklch(0.17 0.015 var(--brand-h));
+  /* Card is lighter than the page so surfaces read without relying on a 1px
+     border. Previously both were oklch(1 0 0) — identical, zero contrast. */
+  --card: oklch(1 0 0);
+  --card-foreground: var(--foreground);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--foreground);
+
+  --primary: oklch(0.52 0.21 var(--brand-h));
+  --primary-foreground: oklch(0.99 0.005 var(--brand-h));
+  --secondary: oklch(0.96 0.008 var(--brand-h));
+  --secondary-foreground: oklch(0.28 0.05 var(--brand-h));
+  --muted: oklch(0.965 0.006 var(--brand-h));
+  --muted-foreground: oklch(0.53 0.02 var(--brand-h));
+  --accent: oklch(0.95 0.02 var(--brand-h));
+  --accent-foreground: oklch(0.3 0.08 var(--brand-h));
+
+  --destructive: oklch(0.58 0.22 25);
+  --success: oklch(0.62 0.15 155);
+
+  --border: oklch(0.9 0.008 var(--brand-h));
+  --input: oklch(0.9 0.008 var(--brand-h));
+  --ring: oklch(0.62 0.16 var(--brand-h));
+
+  --radius: 0.625rem;
+
+  /* Glass */
+  --glass-bg: color-mix(in oklab, var(--card) 72%, transparent);
+  --glass-border: color-mix(in oklab, var(--foreground) 10%, transparent);
+  --glass-blur: 14px;
+  --elevated: oklch(1 0 0);
+
+  --elevation-1: 0 1px 2px oklch(0.17 0.015 var(--brand-h) / 0.05),
+    0 1px 3px oklch(0.17 0.015 var(--brand-h) / 0.04);
+  --elevation-2: 0 4px 12px oklch(0.17 0.015 var(--brand-h) / 0.07),
+    0 2px 4px oklch(0.17 0.015 var(--brand-h) / 0.04);
+  --elevation-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 22%, transparent),
+    0 8px 28px color-mix(in oklab, var(--primary) 16%, transparent);
+
+  /* Gradients */
+  --gradient-hero: radial-gradient(
+      120% 120% at 15% 0%,
+      color-mix(in oklab, var(--primary) 18%, transparent) 0%,
+      transparent 55%
+    ),
+    radial-gradient(100% 100% at 95% 10%, oklch(0.7 0.16 220 / 0.14) 0%, transparent 60%);
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    oklch(0.62 0.19 250) 50%,
+    oklch(0.7 0.16 205) 100%
+  );
+  --gradient-surface: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--card) 100%, transparent) 0%,
+    color-mix(in oklab, var(--muted) 55%, transparent) 100%
+  );
+  --gradient-edge: linear-gradient(
+    145deg,
+    color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
+    transparent 40%
+  );
+
+  /* Context Bank taxonomy */
+  --kind-decision: oklch(0.55 0.2 292);
+  --kind-constraint: oklch(0.62 0.15 75);
+  --kind-architecture: oklch(0.58 0.12 195);
+  --kind-change: oklch(0.58 0.16 245);
+  --kind-known-issue: oklch(0.58 0.2 25);
+  --kind-open-question: oklch(0.55 0.02 var(--brand-h));
+
+  --state-active: oklch(0.6 0.15 155);
+  --state-pending: oklch(0.65 0.15 75);
+  --state-rejected: oklch(0.58 0.2 25);
+  --state-neutral: oklch(0.55 0.02 var(--brand-h));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.16 0.014 var(--brand-h));
+    --foreground: oklch(0.96 0.006 var(--brand-h));
+    --card: oklch(0.205 0.016 var(--brand-h));
+    --popover: oklch(0.22 0.016 var(--brand-h));
+
+    --primary: oklch(0.68 0.18 var(--brand-h));
+    --primary-foreground: oklch(0.16 0.02 var(--brand-h));
+    --secondary: oklch(0.27 0.02 var(--brand-h));
+    --secondary-foreground: oklch(0.94 0.01 var(--brand-h));
+    --muted: oklch(0.26 0.016 var(--brand-h));
+    --muted-foreground: oklch(0.71 0.02 var(--brand-h));
+    --accent: oklch(0.3 0.04 var(--brand-h));
+    --accent-foreground: oklch(0.95 0.01 var(--brand-h));
+
+    --destructive: oklch(0.7 0.19 25);
+    --success: oklch(0.72 0.16 155);
+
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 16%);
+    --ring: oklch(0.65 0.16 var(--brand-h));
+
+    --glass-bg: color-mix(in oklab, var(--card) 62%, transparent);
+    --glass-border: color-mix(in oklab, oklch(1 0 0) 12%, transparent);
+    --elevated: oklch(0.24 0.018 var(--brand-h));
+
+    --elevation-1: 0 1px 2px oklch(0 0 0 / 0.4);
+    --elevation-2: 0 6px 20px oklch(0 0 0 / 0.5), 0 2px 6px oklch(0 0 0 / 0.35);
+    --elevation-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
+      0 8px 32px color-mix(in oklab, var(--primary) 22%, transparent);
+
+    --gradient-hero: radial-gradient(
+        120% 120% at 15% 0%,
+        color-mix(in oklab, var(--primary) 24%, transparent) 0%,
+        transparent 55%
+      ),
+      radial-gradient(100% 100% at 95% 10%, oklch(0.6 0.17 220 / 0.2) 0%, transparent 60%);
+    --gradient-edge: linear-gradient(145deg, oklch(1 0 0 / 0.14) 0%, transparent 40%);
+
+    /* Lifted and desaturated slightly so they hold up on a dark ground. */
+    --kind-decision: oklch(0.72 0.17 292);
+    --kind-constraint: oklch(0.78 0.14 75);
+    --kind-architecture: oklch(0.74 0.11 195);
+    --kind-change: oklch(0.72 0.14 245);
+    --kind-known-issue: oklch(0.72 0.17 25);
+    --kind-open-question: oklch(0.72 0.02 var(--brand-h));
+
+    --state-active: oklch(0.75 0.15 155);
+    --state-pending: oklch(0.8 0.14 75);
+    --state-rejected: oklch(0.72 0.17 25);
+    --state-neutral: oklch(0.72 0.02 var(--brand-h));
+  }
+}
+
+@keyframes shimmer-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+
+  /* Respect the OS setting rather than animating regardless. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@utility glass-surface {
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+}
+
+@utility gradient-text {
+  background-image: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
